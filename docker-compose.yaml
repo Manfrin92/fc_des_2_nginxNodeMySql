@@ -1,0 +1,50 @@
+version: '3'
+
+services:
+  node:
+    build:
+      context: ./node
+      dockerfile: Dockerfile
+    container_name: nodesafio
+    networks:
+      - olarmundo
+    depends_on:
+      - mydatabase
+    volumes:
+      - ./node:/usr/src/app
+    tty: true
+
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: nginx
+    ports:
+      - "8080:80"
+    depends_on:
+      - node
+    networks:
+      - olarmundo
+
+  mydatabase:
+    build: 
+      context: ./mysql
+      dockerfile: Dockerfile
+    container_name: mydatabase
+    command: --innodb-use-native-aio=0
+    tty: true
+    restart: always
+    volumes:
+      - ./mysql/volume:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=nodedb
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=userpassword
+    networks:
+      - olarmundo
+
+networks:
+  olarmundo:
+    driver: bridge
+  

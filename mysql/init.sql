@@ -1,0 +1,6 @@
+CREATE DATABASE IF NOT EXISTS nodedb;
+USE nodedb;
+
+CREATE TABLE IF NOT EXISTS person (
+  name VARCHAR(254)
+);

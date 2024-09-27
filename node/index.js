@@ -34,6 +34,11 @@ function getListItemFromPersonArray(personArray) {
 }
 
 // routes
+app.get('/healthcheck', (req, res) => {
+  console.log("checking service");
+  res.send("healthy");
+});
+
 app.get('/', async (req, res) => {
   const count = await getNameCount();
 

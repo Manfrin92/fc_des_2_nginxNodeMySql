@@ -9,8 +9,14 @@ services:
     networks:
       - olarmundo
     depends_on:
-      - mydatabase
+      mydatabase:
+        condition: service_healthy
     tty: true
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/healthcheck"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
   nginx:
     build:
@@ -20,7 +26,8 @@ services:
     ports:
       - "8080:80"
     depends_on:
-      - node
+      node:
+        condition: service_healthy
     networks:
       - olarmundo
 
@@ -41,6 +48,11 @@ services:
       - MYSQL_PASSWORD=userpassword
     networks:
       - olarmundo
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 10s
+      timeout: 10s
+      retries: 8
 
 networks:
   olarmundo:

@@ -10,8 +10,6 @@ services:
       - olarmundo
     depends_on:
       - mydatabase
-    volumes:
-      - ./node:/usr/src/app
     tty: true
 
   nginx:

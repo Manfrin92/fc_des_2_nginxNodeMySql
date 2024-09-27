@@ -17,6 +17,9 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3
+    volumes:
+      - ./node:/usr/src/app
+      - /usr/src/app/node_modules  # Prevents overwriting of the container's node_modules
 
   nginx:
     build:
